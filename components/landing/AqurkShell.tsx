@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { Check, Menu, Monitor, Moon, Sun } from "lucide-react"
 import { AqurkLogo } from "@/components/brand/AqurkLogo"

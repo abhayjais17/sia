@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next"
+import type { Metadata } from "next"
 import Link from "next/link"
 import { AqurkLogo } from "@/components/brand/AqurkLogo"
 import { AqurkIcon } from "@/components/brand/AqurkIcon"

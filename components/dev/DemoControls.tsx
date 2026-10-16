@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useState } from "react"
 import { SlidersHorizontal, X } from "lucide-react"

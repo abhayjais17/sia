@@ -53,6 +53,7 @@ Message envelope types: `msg`, `ack` (delivered/seen), `typing`, `ping`/`pong` (
 - Worker: `cd worker && pnpm dev` (wrangler dev), `pnpm deploy`.
 
 ## Working agreements
+- On Windows, always write files as UTF-8 WITHOUT BOM (never PowerShell Set-Content/Out-File defaults). Edit JSON/config files with proper tools, not by rewriting them via shell redirection.
 - Work in small steps. After each step: run `pnpm typecheck` and `pnpm build`, fix errors, then `git commit` with a clear message. Never leave the app broken.
 - Keep UI components free of transport/crypto logic; all of it goes through the 5 hooks above (keep their public return shapes stable so the UI keeps working).
 - Add tests for pure logic (crypto, protocol parsing, chunking, safety code) with Vitest.
