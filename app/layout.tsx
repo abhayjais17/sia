@@ -9,19 +9,19 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"),
-  title: "Aqurk — Say it. Hide it. Aqurk it.",
+  title: "Aqurk — Be heard. Not seen.",
   description: "A frontend preview of a calmer, more private way to connect. No accounts, no database, no tracking. All connections and encryption are simulated in this demo.",
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }, { url: "/aqurk-icon-512.png", sizes: "512x512", type: "image/png" }],
     apple: [{ url: "/aqurk-icon-512.png", sizes: "512x512", type: "image/png" }],
   },
   openGraph: {
-    title: "Aqurk — Say it. Hide it. Aqurk it.",
+    title: "Aqurk — Be heard. Not seen.",
     description: "No account. No database. No trace stored. A frontend preview; connections and encryption are simulated.",
     siteName: "Aqurk",
     images: [{ url: "/aqurk-icon-512.png", alt: "Aqurk: two violet-blue speech bubbles encircled by an orbit" }],
   },
-  twitter: { card: "summary", title: "Aqurk — Say it. Hide it. Aqurk it.", images: ["/aqurk-icon-512.png"] },
+  twitter: { card: "summary", title: "Aqurk — Be heard. Not seen.", images: ["/aqurk-icon-512.png"] },
   manifest: "/manifest.webmanifest",
   referrer: "no-referrer",
 }

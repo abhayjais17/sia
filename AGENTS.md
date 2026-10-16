@@ -3,7 +3,7 @@
 Project guide for coding agents (Codex). Read this fully before changing anything.
 
 ## What Aqurk is
-An anonymous, end-to-end encrypted, peer-to-peer chat web app. Two people enter the same name + secret code, join the same private room, and chat with no account, email, phone number or database. Tagline: **"Say it. Hide it. Aqurk it."** Supporting line: "No account. No database. No trace stored."
+An anonymous, end-to-end encrypted, peer-to-peer chat web app. Two people enter the same name + secret code, join the same private room, and chat with no account, email, phone number or database. Tagline: **"Be heard. Not seen."** Supporting line: "End-to-end encrypted, with no accounts or stored data."
 Never claim "100% untraceable". Honest wording: "End-to-end encrypted, no accounts, no stored data".
 
 ## Current state
@@ -24,6 +24,7 @@ Never claim "100% untraceable". Honest wording: "End-to-end encrypted, no accoun
 - No localStorage/cookies for personal data. Session state is in memory only (tab close = chat gone).
 - Light theme is the default. `/chat` is a pure messenger screen (no brand bar/footer).
 - Dev-only "Demo controls" must not ship in production builds.
+- Demo controls render only when `NEXT_PUBLIC_DEMO=1`. Copy `.env.example` when you need to enable them locally; keep the default value at `0`.
 
 ## Target architecture
 | Layer | Choice |

@@ -634,3 +634,20 @@ mark { background: #fce591; color: #362800; border-radius: 2px; }
 .settings-about { padding-top:8px; color:var(--muted-foreground); font-size:11px; }
 .settings-about a { text-decoration:underline; }
 @media (max-width:767px) { .settings-sheet { top:auto; bottom:0; left:0; transform:none; translate:none; width:100%; max-width:100%; max-height:calc(100dvh - env(safe-area-inset-top)); border-radius:22px 22px 0 0; padding-bottom:max(20px,env(safe-area-inset-bottom)); } }
+/* Tagline refinement and safe placement for opt-in demo handles. */
+.hero h1 { color: var(--foreground); font-weight: 600; }
+.hero h1 > span { white-space: nowrap; }
+@media (min-width: 768px) {
+  .hero h1 { flex-direction: row; justify-content: center; gap: .25em; }
+}
+@media (max-width: 600px) {
+  .hero h1 { flex-direction: column; align-items: center; gap: .12em; }
+  .demo-controls { position: fixed; top: max(58px, calc(env(safe-area-inset-top) + 52px)); right: max(8px, env(safe-area-inset-right)); bottom: auto; left: auto; z-index: 35; }
+  .demo-controls > button { display: grid; place-items: center; width: 32px; min-width: 32px; height: 32px; min-height: 32px; padding: 0; overflow: hidden; border-radius: 999px; opacity: .45; font-size: 0; }
+  .demo-controls > button:hover, .demo-controls > button:focus-visible { opacity: 1; }
+  .demo-controls > button svg { width: 15px; height: 15px; }
+  .chat-demo-toggle { display: block; position: absolute; top: 8px; right: 8px; bottom: auto; left: auto; z-index: 12; width: auto; margin: 0; padding: 0; background: transparent; }
+  .chat-demo-toggle > button { display: grid; place-items: center; width: 32px; min-width: 32px; height: 32px; min-height: 32px; padding: 0; overflow: hidden; border-radius: 999px; opacity: .45; font-size: 0; }
+  .chat-demo-toggle > button:hover, .chat-demo-toggle > button:focus-visible { opacity: 1; }
+  .chat-demo-toggle > button svg { width: 15px; height: 15px; }
+}

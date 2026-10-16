@@ -144,9 +144,8 @@ export function AqurkExperience() {
                 >
                   
                   <h1>
-                    <span>Say it.</span>{" "}
-                    <span>Hide it.</span>{" "}
-                    <span className="gradient-text">Aqurk it.</span>
+                    <span>Be heard.</span>{" "}
+                    <span className="gradient-text">Not seen.</span>
                   </h1>
                   <p>End-to-end encrypted, with no accounts or stored data.</p>
                 </motion.div>
@@ -248,12 +247,14 @@ export function AqurkExperience() {
           />
         )}
         <InfoDialog topic={info} onClose={() => setInfo(null)} />
-        <DemoControls
-          scenario={connection.scenario}
-          onScenario={connection.setScenario}
-          state={connection.state}
-          onArrival={connection.simulateArrival}
-        />
+        {process.env.NEXT_PUBLIC_DEMO === "1" && (
+          <DemoControls
+            scenario={connection.scenario}
+            onScenario={connection.setScenario}
+            state={connection.state}
+            onArrival={connection.simulateArrival}
+          />
+        )}
       </main>
     </AqurkShell>
   );

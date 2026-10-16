@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next"
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Aqurk", short_name: "Aqurk",
-    description: "Say it. Hide it. Aqurk it. A frontend preview; connections and encryption are simulated.",
+    description: "Be heard. Not seen. End-to-end encrypted, with no accounts or stored data.",
     start_url: "/", display: "standalone",
     background_color: "#F7F8FC", theme_color: "#F7F8FC",
     icons: [
