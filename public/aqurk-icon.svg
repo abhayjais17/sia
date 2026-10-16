@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <defs>
+    <linearGradient id="bub" x1="60" y1="60" x2="460" y2="460" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8B5CF6"/><stop offset="0.55" stop-color="#5B7CFF"/><stop offset="1" stop-color="#22B8F0"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="30" y1="330" x2="490" y2="190" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#A78BFA"/><stop offset="1" stop-color="#67E8F9"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="0.3" cy="0.25" r="0.8">
+      <stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="mA" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+      <rect width="512" height="512" fill="#fff"/><circle cx="322" cy="312" r="126" fill="#000"/>
+    </mask>
+    <mask id="mB" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+      <rect width="512" height="512" fill="#fff"/><circle cx="198" cy="200" r="130" fill="#000"/>
+    </mask>
+    <clipPath id="front"><path d="M0 0H512V512H0Z M-1 -1"/></clipPath>
+    <clipPath id="lowerArc"><rect x="0" y="262" width="512" height="300"/></clipPath>
+  </defs>
+  <!-- lens (dark core) -->
+  <clipPath id="cA"><circle cx="198" cy="200" r="132"/></clipPath>
+  
+  <!-- orbit (back) -->
+  <g transform="rotate(-18 256 262)">
+    <ellipse cx="256" cy="262" rx="222" ry="66" stroke="url(#ring)" stroke-width="13"/>
+  </g>
+  <!-- bubble A: large, top-left, tail down-left -->
+  <g mask="url(#mA)">
+    <path d="M198 70C128 70 70 128 70 200c0 38 16 72 42 96 -6 22 -14 42 -30 62 34 -4 62 -18 84 -36 22 10 46 12 70 8C300 322 326 270 326 200 326 128 268 70 198 70Z" fill="url(#bub)"/>
+    <path d="M198 70C128 70 70 128 70 200c0 38 16 72 42 96 -6 22 -14 42 -30 62 34 -4 62 -18 84 -36 22 10 46 12 70 8C300 322 326 270 326 200 326 128 268 70 198 70Z" fill="url(#shine)"/>
+  </g>
+  <!-- bubble B: second, bottom-right, tail down-right -->
+  <g mask="url(#mB)">
+    <path d="M322 186C256 186 196 242 196 312c0 68 56 126 126 126 26 0 50-8 70-20 20 20 44 30 70 34 -14 -18 -22 -36 -26 -56 18-22 28-50 28-84 0-70-60-126-136-126Z" fill="url(#bub)" transform="translate(-6 -10) scale(1)"/>
+    <path d="M322 186C256 186 196 242 196 312c0 68 56 126 126 126 26 0 50-8 70-20 20 20 44 30 70 34 -14 -18 -22 -36 -26 -56 18-22 28-50 28-84 0-70-60-126-136-126Z" fill="url(#shine)" transform="translate(-6 -10)"/>
+  </g>
+  <!-- orbit (front half) -->
+  <g transform="rotate(-18 256 262)"><g clip-path="url(#lowerArc)">
+      <ellipse cx="256" cy="262" rx="222" ry="66" stroke="url(#ring)" stroke-width="13"/>
+  </g></g>
+  <!-- dots -->
+  <circle cx="228" cy="256" r="13" fill="#8B5CF6"/>
+  <circle cx="262" cy="256" r="13" fill="#6C8CFF"/>
+  <circle cx="296" cy="256" r="13" fill="#22D3EE"/>
+</svg>
