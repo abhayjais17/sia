@@ -1,7 +1,1 @@
-/// <reference types="next" />
-/// <reference types="next/image-types/global" />
-import "./.next/dev/types/routes.d.ts";
-import "./.next/dev/types/root-params.d.ts";
-
-// NOTE: This file should not be edited
-// see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+/// <reference types="next" />`n/// <reference types="next/image-types/global" />`nimport "./.next/dev/types/routes.d.ts";`nimport "./.next/dev/types/root-params.d.ts";`n`n// NOTE: This file should not be edited`n// see https://nextjs.org/docs/app/api-reference/config/typescript for more information.`n

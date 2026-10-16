@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import {
   ChevronLeft,
   EllipsisVertical,
@@ -84,7 +84,7 @@ export function ChatHeader({
           )}
           <span className="header-transport">
             {" "}
-            · {relay ? "Relayed" : "Direct connection"}
+            Â· {relay ? "Relayed" : "Direct connection"}
           </span>
         </p>
       </div>
@@ -159,7 +159,7 @@ export function ChatHeader({
               <DropdownMenuItem className="mobile-room-action" onClick={() => action("info")}>
                 <Info />Room information
               </DropdownMenuItem>
-              {process.env.NODE_ENV === "development" && <DropdownMenuItem onClick={() => action("demo")}>
+              {process.env.NEXT_PUBLIC_DEMO === "1" && <DropdownMenuItem onClick={() => action("demo")}>
                 <SlidersHorizontal />Demo controls
               </DropdownMenuItem>}
               <DropdownMenuItem onClick={() => action("timer")}>
@@ -198,3 +198,4 @@ export function ChatHeader({
     </header>
   );
 }
+

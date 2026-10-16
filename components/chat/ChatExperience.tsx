@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import dynamic from "next/dynamic"
 import Link from "next/link"
@@ -25,11 +25,19 @@ import { SearchBar, TimerDialog, timers } from "./ConversationTools"
 import { jumpToMessage } from "./MessageBubble"
 import { useCall } from "@/hooks/use-call"
 import { CallOverlay } from "./CallOverlay"
-import { toast } from "sonner"
+import { usePreferences } from "@/components/AqurkProvider"
+import { Lock, Moon, Sun } from "lucide-react"
 
 const ImageLightbox = dynamic(() => import("./ImageLightbox"))
 export function ChatExperience() {
   const { session, start, clear: clearSession } = useSession()
+  const { theme, setTheme } = usePreferences()
+  const [blurred, setBlurred] = useState(false)
+  const [blurOnSwitch, setBlurOnSwitch] = useState(false)
+  const [autoLock, setAutoLock] = useState(false)
+  const [saveLocally, setSaveLocally] = useState(false)
+  const [warningEnabled, setWarningEnabled] = useState(true)
+  useEffect(() => { let idle: ReturnType<typeof setTimeout>; const lock = () => setBlurred(true); const activity = () => { if (autoLock) { clearTimeout(idle); idle = setTimeout(lock, 5 * 60 * 1000) } }; const visibility = () => { if (blurOnSwitch && document.hidden) lock() }; activity(); document.addEventListener("visibilitychange", visibility); window.addEventListener("pointerdown", activity); window.addEventListener("keydown", activity); return () => { clearTimeout(idle); document.removeEventListener("visibilitychange", visibility); window.removeEventListener("pointerdown", activity); window.removeEventListener("keydown", activity) } }, [autoLock, blurOnSwitch])
   const router = useRouter()
   const presence = useMockPresence()
   const [timer, setTimer] = useState<DisappearingTimer>(0)
@@ -52,7 +60,7 @@ export function ChatExperience() {
   const call = useCall(chat.system)
   const [reply, setReply] = useState<Message | null>(null)
   const [deleting, setDeleting] = useState<Message | null>(null)
-  const [dialog, setDialog] = useState<"safety" | "leave" | "privacy" | "panic" | "timer" | null>(null)
+  const [dialog, setDialog] = useState<"safety" | "leave" | "privacy" | "panic" | "timer" | "settings" | null>(null)
   const [info, setInfo] = useState(true)
   const [mobileInfo, setMobileInfo] = useState(false)
   const [demoOpen, setDemoOpen] = useState(false)
@@ -82,7 +90,7 @@ export function ChatExperience() {
     else if (value === "search") { setSearchOpen(v => !v); setQuery(""); setMatchIndex(0) }
     else if (value === "panic" || value === "timer" || value === "leave" || value === "safety") setDialog(value)
     else if (value === "voice" || value === "video") call.start(value)
-    else if (value === "settings") toast.info("Settings are being prepared.")
+    else if (value === "settings") setDialog("settings")
   }
   const send = (text: string, duration?: number) => {
     const emoji = /\p{Extended_Pictographic}/u.test(text) && /^[\p{Extended_Pictographic}\p{Emoji_Component}\s]+$/u.test(text)
@@ -95,13 +103,13 @@ export function ChatExperience() {
     <div className="chat-workspace"><section className="conversation-panel" aria-label="Private demo room">
       <ChatHeader peer={chat.peer} verified={session.verified} relay={session.relay} action={action} disabled={disabled} />
       {searchOpen && <SearchBar query={query} setQuery={v => { setQuery(v); setMatchIndex(0) }} count={matches.length} index={activeIndex} move={n => setMatchIndex((activeIndex + n + matches.length) % matches.length)} close={() => { setSearchOpen(false); setQuery("") }} />}
-      {!!timer && <button className="timer-banner" onClick={() => setDialog("timer")}>Disappearing messages · {timers.find(t => t.value === timer)?.label}</button>}
+      {!!timer && <button className="timer-banner" onClick={() => setDialog("timer")}>Disappearing messages Â· {timers.find(t => t.value === timer)?.label}</button>}
       <PresenceBanner network={presence.network} online={chat.peer.online} />
-      <div className={`conversation-body ${wiping ? "panic-wipe" : ""}`}>
+      <div className={`conversation-body ${wiping ? "panic-wipe" : ""} ${blurred ? "chat-blurred" : ""}`} onClick={() => blurred && setBlurred(false)}>{blurred && <button className="unlock-chat" onClick={() => setBlurred(false)}>Tap to reveal chat</button>}
         <MessageList query={query} messages={chat.messages} typing={chat.peer.typing && !disabled} onReply={setReply} onDelete={setDeleting} onReact={chat.react} onImage={(url, name) => setImage({ url, name })} onTransfer={transfer.action} />
-        <ChatDemoControls event={demoEvent} chat={chat} network={presence.network} setNetwork={presence.setNetwork} open={demoOpen} setOpen={setDemoOpen} />
+        {process.env.NEXT_PUBLIC_DEMO === "1" && <ChatDemoControls event={demoEvent} chat={chat} network={presence.network} setNetwork={presence.setNetwork} open={demoOpen} setOpen={setDemoOpen} />}
       </div>
-      <Composer disabled={disabled} disabledReason={presence.network === "offline" ? "You’re offline. Reconnect to send messages." : presence.network === "reconnecting" ? "Reconnecting… sending is paused." : "Your friend is offline. Sending is paused until they return."} reply={reply} clearReply={() => setReply(null)} send={send} files={files => {
+      <Composer disabled={disabled} disabledReason={presence.network === "offline" ? "Youâ€™re offline. Reconnect to send messages." : presence.network === "reconnecting" ? "Reconnectingâ€¦ sending is paused." : "Your friend is offline. Sending is paused until they return."} reply={reply} clearReply={() => setReply(null)} send={send} files={files => {
         const images = files.filter(f => f.type.startsWith("image/"))
         for (let i = 0; i < images.length; i += 4) { const group = images.slice(i, i + 4).map(transfer.create); chat.send("", "image", undefined, reply?.id, undefined, group) }
         files.filter(f => !f.type.startsWith("image/")).forEach(file => chat.send("", file.type.startsWith("video/") ? "video" : "file", transfer.create(file), reply?.id))
@@ -110,14 +118,21 @@ export function ChatExperience() {
     </section>{info && <aside className="room-info" aria-label="Room information"><RoomInfo peer={chat.peer} verified={session.verified} relay={session.relay} onSafety={() => setDialog("safety")} onTimer={() => action("timer")} onPrivacy={() => setDialog("privacy")} /></aside>}</div>
     <Dialog open={mobileInfo} onOpenChange={setMobileInfo}><DialogContent className="aqurk-dialog mobile-info-dialog"><DialogHeader><DialogTitle>Room information</DialogTitle><DialogDescription>Your peer and connection details.</DialogDescription></DialogHeader><RoomInfo peer={chat.peer} verified={session.verified} relay={session.relay} onSafety={() => { setMobileInfo(false); setDialog("safety") }} onTimer={() => action("timer")} onPrivacy={() => { setMobileInfo(false); setDialog("privacy") }} /></DialogContent></Dialog>
 
-    {dialog === "safety" && <SafetyCodeModal open onVerify={() => { start({ ...session, verified: true }); setDialog(null) }} onSkip={() => setDialog(null)} onLeave={() => leave()} />}
+    <Dialog open={dialog === "settings"} onOpenChange={open => !open && setDialog(null)}><DialogContent className="aqurk-dialog settings-sheet"><DialogHeader><DialogTitle>Settings</DialogTitle><DialogDescription>Preferences apply to this tab and stay in memory.</DialogDescription></DialogHeader><section className="settings-section"><h3>Appearance</h3><div className="settings-theme">{([["light", "Light", Sun], ["dark", "Dark", Moon], ["system", "System", Lock]] as const).map(([value, label, Icon]) => <Button key={value} variant={theme === value ? "secondary" : "outline"} onClick={() => setTheme(value)}><Icon />{label}</Button>)}</div></section><label className="settings-row">Notification sound<input type="checkbox" defaultChecked /></label><label className="settings-row">Volume<input type="range" min="0" max="100" defaultValue="60" /></label><label className="settings-row">Blur chat on tab switch<input type="checkbox" checked={blurOnSwitch} onChange={e => setBlurOnSwitch(e.target.checked)} /></label><label className="settings-row">Auto-lock after inactivity<input type="checkbox" checked={autoLock} onChange={e => setAutoLock(e.target.checked)} /></label><div className="settings-row locked-setting"><span>Link previews <small>Locked off to protect your privacy.</small></span><Lock /></div><label className="settings-row">Warn before screenshots or copying<input type="checkbox" checked={warningEnabled} onChange={e => setWarningEnabled(e.target.checked)} /></label><label className="settings-row">Save chat locally<input type="checkbox" checked={saveLocally} onChange={e => { if (e.target.checked && window.confirm("Saving chat stores a copy on this device. This demo does not save chat data.")) setSaveLocally(true); else setSaveLocally(false) }} /></label><div className="settings-row"><span>Default disappearing timer</span><div className="settings-theme"><Button size="sm" variant="outline" onClick={() => changeTimer(0)}>Off</Button><Button size="sm" variant="outline" onClick={() => changeTimer(60)}>1 min</Button><Button size="sm" variant="outline" onClick={() => changeTimer(3600)}>1 hour</Button></div></div><Button variant="destructive" onClick={() => { setDialog("panic") }}>Clear local data</Button><p className="settings-about">About Aqurk · v0.1.0 · <Link href="/privacy">Privacy</Link></p></DialogContent></Dialog>
+        {dialog === "safety" && <SafetyCodeModal open onVerify={() => { start({ ...session, verified: true }); setDialog(null) }} onSkip={() => setDialog(null)} onLeave={() => leave()} />}
     <InfoDialog topic={dialog === "privacy" ? "privacy" : null} onClose={() => setDialog(null)} />
-    <Dialog open={!!deleting} onOpenChange={open => !open && setDeleting(null)}><DialogContent className="aqurk-dialog"><DialogHeader><DialogTitle>Delete this message?</DialogTitle><DialogDescription>Deletion only affects this in-memory demo. It cannot remove screenshots or copies.</DialogDescription></DialogHeader><Button variant="outline" onClick={() => { if (deleting) chat.remove(deleting.id, false); setDeleting(null) }}>Delete for me</Button>{deleting?.senderId === "me" && <Button variant="destructive" onClick={() => { if (deleting) chat.remove(deleting.id, true); setDeleting(null) }}>Delete for everyone · simulated</Button>}</DialogContent></Dialog>
+    <Dialog open={!!deleting} onOpenChange={open => !open && setDeleting(null)}><DialogContent className="aqurk-dialog"><DialogHeader><DialogTitle>Delete this message?</DialogTitle><DialogDescription>Deletion only affects this in-memory demo. It cannot remove screenshots or copies.</DialogDescription></DialogHeader><Button variant="outline" onClick={() => { if (deleting) chat.remove(deleting.id, false); setDeleting(null) }}>Delete for me</Button>{deleting?.senderId === "me" && <Button variant="destructive" onClick={() => { if (deleting) chat.remove(deleting.id, true); setDeleting(null) }}>Delete for everyone Â· simulated</Button>}</DialogContent></Dialog>
     <Dialog open={dialog === "leave"} onOpenChange={open => !open && setDialog(null)}><DialogContent className="aqurk-dialog"><DialogHeader><DialogTitle>Leave this little space?</DialogTitle><DialogDescription>Your messages and local attachments will be cleared from this tab. There is no saved history to return to.</DialogDescription></DialogHeader><Button variant="destructive" onClick={() => leave()}>Clear and leave</Button><Button variant="outline" onClick={() => setDialog(null)}>Stay here</Button></DialogContent></Dialog>
     <TimerDialog open={dialog === "timer"} close={() => setDialog(null)} value={timer} change={changeTimer} />
     <Dialog open={dialog === "panic"} onOpenChange={v => !v && setDialog(null)}><DialogContent className="aqurk-dialog"><DialogHeader><DialogTitle>Clear everything and leave now?</DialogTitle><DialogDescription>Messages and attachment URLs will be removed from this tab. This cannot erase copies held by someone else.</DialogDescription></DialogHeader><Button variant="destructive" onClick={panic}>Clear everything and leave</Button><Button variant="outline" onClick={() => setDialog(null)}>Keep chatting</Button></DialogContent></Dialog>
-    <Dialog open={!!edge} onOpenChange={v => !v && setEdge(null)}><DialogContent className="aqurk-dialog"><DialogHeader><DialogTitle>{edge === "room-full" ? "Room full" : edge === "incoming-call" ? "Alex is calling…" : "Connection failed"}</DialogTitle><DialogDescription>{edge === "room-full" ? "This room already has two people. Choose a different code." : edge === "incoming-call" ? "Incoming voice call" : "We could not establish the connection. Try again or start a new room."}</DialogDescription></DialogHeader><Button onClick={() => { presence.setNetwork("connected"); setEdge(null) }}>{edge === "incoming-call" ? "Accept" : "Retry"}</Button><Button variant="outline" onClick={() => edge === "incoming-call" ? setEdge(null) : leave()}>{edge === "incoming-call" ? "Decline" : "Start new room"}</Button></DialogContent></Dialog>
+    <Dialog open={!!edge} onOpenChange={v => !v && setEdge(null)}><DialogContent className="aqurk-dialog"><DialogHeader><DialogTitle>{edge === "room-full" ? "Room full" : edge === "incoming-call" ? "Alex is callingâ€¦" : "Connection failed"}</DialogTitle><DialogDescription>{edge === "room-full" ? "This room already has two people. Choose a different code." : edge === "incoming-call" ? "Incoming voice call" : "We could not establish the connection. Try again or start a new room."}</DialogDescription></DialogHeader><Button onClick={() => { presence.setNetwork("connected"); setEdge(null) }}>{edge === "incoming-call" ? "Accept" : "Retry"}</Button><Button variant="outline" onClick={() => edge === "incoming-call" ? setEdge(null) : leave()}>{edge === "incoming-call" ? "Decline" : "Start new room"}</Button></DialogContent></Dialog>
     <CallOverlay call={call} peerName={chat.peer.name} relay={session.relay} />
     <ImageLightbox image={image} close={() => setImage(null)} />
   </main>
 }
+
+
+
+
+
+

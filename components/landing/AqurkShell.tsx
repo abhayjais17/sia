@@ -1,14 +1,17 @@
-"use client"
+﻿"use client"
 
-import { ChevronDown, Heart, Monitor, Moon, ShieldCheck, Sun } from "lucide-react"
+import { Check, Menu, Monitor, Moon, Sun } from "lucide-react"
 import { AqurkLogo } from "@/components/brand/AqurkLogo"
-import { Button } from "@/components/ui/button"
 import { usePreferences } from "@/components/AqurkProvider"
 import type { Theme } from "@/lib/types"
-import type { InfoTopic } from "./InfoDialog"
+import Link from "next/link"
+import { useEffect, useRef, useState } from "react"
 
-export function AqurkShell({ children, onInfo, onHome }: { children: React.ReactNode; onInfo: (topic: InfoTopic) => void; onHome: () => void }) {
+export function AqurkShell({ children, onHome }: { children: React.ReactNode; onInfo?: (topic: never) => void; onHome: () => void }) {
   const { theme, setTheme } = usePreferences()
-  const ThemeIcon = theme === "dark" ? Moon : theme === "light" ? Sun : Monitor
-  return <div className="aqurk-app"><div className="ambient-background" aria-hidden="true"><div className="ambient-grid" /><div className="orb orb-violet" /><div className="orb orb-cyan" /></div><header className="site-header"><button type="button" className="brand-home" onClick={onHome} aria-label={"Aqurk home"}><AqurkLogo /></button><nav className="header-actions" aria-label={"Preferences and help"}><Button variant="ghost" onClick={() => onInfo("how")} className="how-link">{"How it works"}</Button><span className="nav-divider" /><label className="theme-select"><ThemeIcon className="size-4" /><select aria-label={"Color theme"} value={theme} onChange={e => setTheme(e.target.value as Theme)}><option value="dark">{"Dark"}</option><option value="light">{"Light"}</option><option value="system">{"System"}</option></select><ChevronDown className="size-3" /></label></nav></header>{children}<footer className="site-footer"><span className="footer-promise"><ShieldCheck className="size-3.5" />{"Privacy isn’t a feature. It’s the whole point."}</span><nav aria-label={"Footer"} className="flex flex-wrap justify-center gap-x-6 gap-y-2"><button onClick={() => onInfo("how")}>{"How it works"}</button><button onClick={() => onInfo("privacy")}>{"Privacy"}</button><button onClick={() => onInfo("safety")}>{"Safety tips"}</button></nav><span className="footer-signoff">{"Less noise. More connection."}<Heart className="size-3" /></span></footer></div>
+  const [open, setOpen] = useState(false)
+  const menu = useRef<HTMLDivElement>(null)
+  useEffect(() => { const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") setOpen(false) }; document.addEventListener("keydown", onKey); return () => document.removeEventListener("keydown", onKey) }, [])
+  const themes: { value: Theme; Icon: typeof Sun; label: string }[] = [{ value: "light", Icon: Sun, label: "Light" }, { value: "dark", Icon: Moon, label: "Dark" }, { value: "system", Icon: Monitor, label: "System" }]
+  return <div className="aqurk-app"><div className="ambient-background" aria-hidden="true"><div className="ambient-grid" /><div className="orb orb-violet" /><div className="orb orb-cyan" /></div><header className="site-header"><button type="button" className="brand-home" onClick={onHome} aria-label="Aqurk home"><AqurkLogo /></button><div className="landing-menu" ref={menu}><button type="button" aria-label="Open menu" aria-expanded={open} className="landing-menu-trigger" onClick={() => setOpen(!open)}><Menu /></button>{open && <div className="landing-menu-panel" role="menu"><Link role="menuitem" href="/how-it-works" onClick={() => setOpen(false)}>How it works</Link><Link role="menuitem" href="/privacy" onClick={() => setOpen(false)}>Privacy</Link><Link role="menuitem" href="/safety" onClick={() => setOpen(false)}>Safety tips</Link><div className="landing-menu-divider" /><span className="menu-caption">Appearance</span>{themes.map(({ value, Icon, label }) => <button role="menuitemradio" aria-checked={theme === value} key={value} onClick={() => setTheme(value)}><Icon />{label}{theme === value && <Check className="menu-check" />}</button>)}<small>About Aqurk · Say it. Hide it. Aqurk it.</small></div>}</div></header>{children}</div>
 }

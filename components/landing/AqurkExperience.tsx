@@ -142,13 +142,13 @@ export function AqurkExperience() {
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <AqurkIcon variant="glow" className="mx-auto mb-4 size-16" />
+                  
                   <h1>
                     <span>Say it.</span>{" "}
                     <span>Hide it.</span>{" "}
                     <span className="gradient-text">Aqurk it.</span>
                   </h1>
-                  <p>{"No account. No database. No trace stored."}</p>
+                  <p>End-to-end encrypted, with no accounts or stored data.</p>
                 </motion.div>
                 <EntryCard
                   name={name}
@@ -159,28 +159,7 @@ export function AqurkExperience() {
                   onShare={share}
                   loading={submitting}
                 />
-                <motion.div
-                  className="trust-section"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.35 }}
-                >
-                  <div className="trust-row">
-                    {trust.map(({ icon: Icon, label }) => (
-                      <span key={label}>
-                        <Icon className="size-3.5" />
-                        {label}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="preview-disclaimer">
-                    <span className="preview-dot" />
-                    {"FRONTEND PREVIEW"}
-                    <span className="disclaimer-separator">/</span>
-                    {"Connection & encryption are simulated"}
-                  </p>
-                </motion.div>
-              </>
+</>
             ) : (
               <>
                 <div className="flow-eyebrow">
@@ -278,3 +257,4 @@ export function AqurkExperience() {
     </AqurkShell>
   );
 }
+

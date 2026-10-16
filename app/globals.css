@@ -567,3 +567,70 @@ mark { background: #fce591; color: #362800; border-radius: 2px; }
   .radar-ring:nth-child(2) { transform: scale(.8); }
   .radar-ring:nth-child(3) { transform: scale(.6); }
 }
+.aqurk-app { min-height: 100dvh; }
+.site-header { padding: max(14px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 12px max(20px, env(safe-area-inset-left)); }
+.aqurk-logo > .lucide, .aqurk-logo svg { width: 30px; height: 30px; }
+.aqurk-logo > span { font-size: 23px; }
+.landing-menu { position: relative; z-index: 40; }
+.landing-menu-trigger { display:grid; place-items:center; width:40px; height:40px; min-height:40px; border:1px solid var(--border); border-radius:12px; background:var(--card); color:var(--foreground); box-shadow:0 4px 14px #0000000a; }
+.landing-menu-trigger svg { width:20px; height:20px; }
+.landing-menu-panel { position:absolute; top:calc(100% + 10px); right:0; width:248px; padding:8px; border:1px solid var(--border); border-radius:16px; background:var(--card); box-shadow:var(--card-shadow); }
+.landing-menu-panel > a,.landing-menu-panel > button { display:flex; align-items:center; width:100%; min-height:40px; gap:10px; padding:8px 10px; border-radius:9px; text-decoration:none; text-align:left; color:var(--foreground); font-size:13px; }
+.landing-menu-panel > a:hover,.landing-menu-panel > button:hover { background:var(--surface-2); }
+.landing-menu-panel > button svg { width:16px; height:16px; color:var(--muted-foreground); }
+.landing-menu-panel .menu-caption { display:block; padding:8px 10px 2px; font-size:11px; color:var(--muted-foreground); }
+.landing-menu-panel .menu-check { margin-left:auto; color:var(--primary); }
+.landing-menu-panel small { display:block; padding:12px 10px 7px; border-top:1px solid var(--border); color:var(--muted-foreground); font-size:10px; }
+.landing-menu-divider { height:1px; margin:5px 2px; background:var(--border); }
+.site-footer { display:none; }
+.hero { margin-bottom:22px; }
+.hero h1 { font-size:clamp(1.75rem,5vw,2.25rem); line-height:1.1; }
+.hero h1 > span { white-space:nowrap; }
+.hero > p { margin-top:10px; font-size:14px; }
+.main-content { padding-top:22px; }
+.entry-card { max-width:442px; }
+.card-footnote { margin-top:14px; font-size:10px; }
+.info-page { min-height:100dvh; }
+.info-page .site-header { max-width:1100px; }
+.info-article { width:min(100% - 32px,660px); margin:clamp(28px,8vh,88px) auto 60px; }
+.info-icon { width:38px; height:38px; color:var(--brand-violet); }
+.info-kicker { margin-top:24px; color:var(--muted-foreground); font-size:10px; letter-spacing:.14em; }
+.info-article h1 { margin-top:12px; font:600 clamp(32px,6vw,52px)/1.08 var(--font-space-grotesk); letter-spacing:-.04em; }
+.info-intro { margin-top:14px; color:var(--muted-foreground); line-height:1.7; }
+.info-article ol { display:grid; gap:12px; margin-top:32px; padding:0; list-style:none; }
+.info-article li { display:flex; gap:16px; padding:20px; border:1px solid var(--border); border-radius:16px; background:var(--card); animation:fade-up .4s both; }
+.info-article li span { color:var(--brand-violet); font-size:12px; font-weight:600; }
+.info-article li p { font-size:14px; line-height:1.7; }
+.info-foot { margin-top:26px; color:var(--muted-foreground); font-size:12px; }
+.info-back { font-size:12px; color:var(--muted-foreground); }
+@keyframes fade-up { from { opacity:0; transform:translateY(10px) } to { opacity:1; transform:none } }
+@media (max-width:600px) {
+  .main-content { padding:12px max(14px, env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left)); }
+  .experience-content { gap:0; }
+  .hero { margin-bottom:14px; }
+  .hero > p { margin-top:8px; font-size:12px; }
+  .entry-card { padding:18px 18px 0; border-radius:17px; }
+  .entry-card > header { margin-bottom:16px; }
+  .entry-card > header h2 { font-size:18px; }
+  .entry-card > header p { margin-top:4px; font-size:11px; }
+  .entry-card form [data-slot='field-group'] { gap:12px; }
+  .entry-card form > div:has(.strength-meter) { margin-top:8px; }
+  .entry-card .card-footnote { margin:12px -18px 0; padding:11px 8px max(11px,env(safe-area-inset-bottom)); font-size:9px; }
+  .hero h1 > span { white-space:normal; }
+  .site-header { padding-inline: max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-left)); }
+  .aqurk-logo > span { font-size:21px; }
+  .info-page .site-header { padding-top:max(14px,env(safe-area-inset-top)); }
+}
+.chat-blurred { filter: blur(18px); user-select:none; }
+.settings-sheet { width:min(520px,calc(100% - 32px)); max-width:520px; max-height:85dvh; overflow:auto; }
+.settings-section h3 { margin-bottom:10px; font-size:12px; font-weight:600; }
+.settings-theme { display:flex; flex-wrap:wrap; gap:8px; }
+.settings-theme button { min-height:40px; }
+.settings-row { display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:48px; padding:8px 0; border-bottom:1px solid var(--border); font-size:12px; }
+.settings-row input[type=checkbox] { accent-color:var(--primary); width:18px; height:18px; }
+.settings-row input[type=range] { width:120px; accent-color:var(--primary); }
+.settings-row select { border:1px solid var(--border); border-radius:8px; padding:7px 10px; background:var(--card); color:var(--foreground); }
+.locked-setting small { display:block; margin-top:3px; color:var(--muted-foreground); font-size:10px; }
+.settings-about { padding-top:8px; color:var(--muted-foreground); font-size:11px; }
+.settings-about a { text-decoration:underline; }
+@media (max-width:767px) { .settings-sheet { top:auto; bottom:0; left:0; transform:none; translate:none; width:100%; max-width:100%; max-height:calc(100dvh - env(safe-area-inset-top)); border-radius:22px 22px 0 0; padding-bottom:max(20px,env(safe-area-inset-bottom)); } }

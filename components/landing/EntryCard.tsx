@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
@@ -33,9 +33,10 @@ export function EntryCard({ name, code, onNameChange, onCodeChange, onEnter, onS
       <div className="mt-4"><StrengthMeter code={code} /></div>
       <AnimatePresence>{getCodeStrength(code) === 1 && <motion.div className="mt-3" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}><Alert variant="destructive"><TriangleAlert /><AlertDescription>{"Weak codes can be guessed by strangers."}</AlertDescription></Alert></motion.div>}</AnimatePresence>
       <div className="mb-6 mt-3 flex items-center justify-between gap-2"><Button type="button" variant="subtle" size="sm" onClick={() => { onCodeChange(generatePassphrase()); setVisible(true); setTouched(prev => ({ ...prev, code: false })) }}><Sparkles data-icon="inline-start" />{"Generate strong code"}</Button><Button type="button" variant="ghost" size="icon" disabled={!code} aria-label={copied ? "Copied" : "Copy secret code"} onClick={() => copy(code)}><AnimatePresence mode="wait"><motion.span key={String(copied)} initial={{ opacity: 0, scale: .8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: .8 }}>{copied ? <Check /> : <Copy />}</motion.span></AnimatePresence></Button></div>
-      <Button type="submit" variant="gradient" size="lg" className="w-full" disabled={!validName || !validCode || loading}>{loading ? <LoaderCircle className="animate-spin" data-icon="inline-start" /> : <LockKeyhole data-icon="inline-start" />}{loading ? "Opening your room…" : "Enter Room"}<ArrowRight data-icon="inline-end" /></Button>
+      <Button type="submit" variant="gradient" size="lg" className="w-full" disabled={!validName || !validCode || loading}>{loading ? <LoaderCircle className="animate-spin" data-icon="inline-start" /> : <LockKeyhole data-icon="inline-start" />}{loading ? "Opening your roomâ€¦" : "Enter Room"}<ArrowRight data-icon="inline-end" /></Button>
       <Button type="button" variant="ghost" className="mt-3 w-full" disabled={!validCode} onClick={onShare}><QrCode data-icon="inline-start" />{"Share via link / QR"}</Button>
     </form>
-    <div className="card-footnote"><ShieldCheck className="size-3.5 shrink-0" /><span>{"Your conversation belongs to you. Not us."}</span></div>
+    <div className="card-footnote"><ShieldCheck className="size-3.5 shrink-0" /><span>{"End-to-end encrypted · No accounts · No stored data"}</span></div>
   </motion.section>
 }
+
