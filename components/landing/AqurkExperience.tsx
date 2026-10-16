@@ -241,6 +241,7 @@ export function AqurkExperience() {
         {safetyOpen && (
           <SafetyCodeModal
             open
+            code={code}
             onVerify={() => finishSafety(true)}
             onSkip={() => finishSafety(false)}
             onLeave={leave}
