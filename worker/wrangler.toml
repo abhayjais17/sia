@@ -1,0 +1,22 @@
+name = "aqurk-signaling"
+main = "src/index.ts"
+compatibility_date = "2026-10-16"
+workers_dev = true
+
+[vars]
+ALLOWED_ORIGIN = "http://localhost:3000"
+
+[observability]
+enabled = false
+
+[observability.logs]
+enabled = false
+invocation_logs = false
+
+[[durable_objects.bindings]]
+name = "ROOMS"
+class_name = "AqurkRoom"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["AqurkRoom"]
